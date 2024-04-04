@@ -1,6 +1,7 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -13,17 +14,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider, Theme } from "@mui/material/styles";
 
-const defaultTheme = createTheme();
-
-const LoginView = (props: any) => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+function LoginView(props: any) {
+  const defaultTheme = createTheme();
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -41,85 +33,101 @@ const LoginView = (props: any) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            로그인
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
+          <Box component="form" noValidate sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
               fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              id="email"
+              label="아이디"
+              name="email"
+              onChange={(e) => {
+                props.setInputs({
+                  ...props.inputs,
+                  loginId: e.target.value,
+                });
+              }}
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="비밀번호"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(e) => {
+                props.setInputs({
+                  ...props.inputs,
+                  loginPw: e.target.value,
+                });
+              }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  value="remember"
+                  color="primary"
+                  onChange={(e) => {
+                    props.setInputs({
+                      ...props.inputs,
+                      loginChk: e.target.checked,
+                    });
+                  }}
+                />
+              }
+              label="로그인 상태 유지"
+            />
+            <Box
+              sx={{
+                display: "flex",
+              }}
             >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
+              <ButtonGroup
+                variant="contained"
+                aria-label="Basic button group"
+                sx={{ width: "100%" }}
+              >
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mr: 3, height: "5vh" }}
+                  onClick={(e) => {
+                    props.Login();
+                  }}
+                >
+                  로그인
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{ mr: 3 }}
+                  onClick={(e) => {
+                    props.setPageNo(2);
+                  }}
+                >
+                  아이디 찾기
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={(e) => {
+                    props.setPageNo(1);
+                  }}
+                >
+                  회원 가입
+                </Button>
+              </ButtonGroup>
+            </Box>
           </Box>
         </Box>
       </Container>
     </ThemeProvider>
   );
-};
+}
 export default LoginView;
