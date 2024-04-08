@@ -47,7 +47,7 @@ function SignUpView(props: any) {
                   autoFocus
                   onChange={(e) => {
                     props.setSignInputs({
-                      ...props.siginInputs,
+                      ...props.signInputs,
                       firstId: e.target.value,
                     });
                   }}
@@ -63,8 +63,24 @@ function SignUpView(props: any) {
                   autoComplete="family-name"
                   onChange={(e) => {
                     props.setSignInputs({
-                      ...props.siginInputs,
+                      ...props.signInputs,
                       lastId: e.target.value,
+                    });
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="id"
+                  label="아이디"
+                  name="id"
+                  autoComplete="id"
+                  onChange={(e) => {
+                    props.setSignInputs({
+                      ...props.signInputs,
+                      loginId: e.target.value,
                     });
                   }}
                 />
@@ -79,7 +95,7 @@ function SignUpView(props: any) {
                   autoComplete="email"
                   onChange={(e) => {
                     props.setSignInputs({
-                      ...props.siginInputs,
+                      ...props.signInputs,
                       email: e.target.value,
                     });
                   }}
@@ -96,7 +112,7 @@ function SignUpView(props: any) {
                   autoComplete="new-password"
                   onChange={(e) => {
                     props.setSignInputs({
-                      ...props.siginInputs,
+                      ...props.signInputs,
                       loginPw: e.target.value,
                     });
                   }}
