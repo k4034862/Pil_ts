@@ -43,12 +43,14 @@ function LoginControl() {
       USER_ID: inputs.loginId,
       PASSWORD: inputs.loginPw,
     };
+
     await axios
       .get("/select", {
         params: getData,
       })
       .then((result: any) => {
-        if (result.data.length > 0) {
+        console.log(result);
+        if (result.data === "success") {
           navigate("/Home");
         } else {
           setSnacks({
@@ -64,17 +66,18 @@ function LoginControl() {
 
   //회원가입 버튼
   const SignUp = async () => {
-    let getData = {
-      USER_NM: signInputs.firstId + signInputs.lastId,
-      USER_ID: signInputs.loginId,
-      PASSWORD: signInputs.loginPw,
-      EMAIL: signInputs.email,
-    };
     await axios
-      .post("/insert", {
-        params: getData,
-      })
+      .post(
+        "/insert",
+        new URLSearchParams({
+          USER_ID: signInputs.loginId,
+          USER_NM: signInputs.firstId + signInputs.lastId,
+          PASSWORD: signInputs.loginPw,
+          USER_EMAIL: signInputs.email,
+        })
+      )
       .then((result: any) => {
+        console.log(result);
         setSnacks({
           ...snacks,
           open: true,

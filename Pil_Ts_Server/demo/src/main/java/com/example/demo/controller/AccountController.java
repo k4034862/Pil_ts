@@ -14,7 +14,7 @@ public class AccountController {
     private AccountService accountService;
     //로그인 버튼
     @RequestMapping(value ="select" ,method = RequestMethod.GET)
-    public List<User> getSelectList(User user){
+    public String getSelectList(User user){
 
         return accountService.select(user);
     }
