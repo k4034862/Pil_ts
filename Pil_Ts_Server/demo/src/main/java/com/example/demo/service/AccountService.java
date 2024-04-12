@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.mybatis.spring.annotation.MapperScan;
 
 import java.io.IOException;
 import java.util.List;
+
+@MapperScan("com.example.demo.mapper")
 @Service
 @Transactional
 public class AccountService {
@@ -27,7 +30,7 @@ public class AccountService {
             // 유저 정보가 존재하지 않을 경우 처리
             if(userInfo == null || userInfo.isEmpty()) {
                 // 예외 처리 또는 사용자에게 메시지 전달 등
-                return new AuthenticationResult(false, null);
+                return new AuthenticationResult(false, null,null);
             }
             // 데이터베이스에서 불러온 비밀번호
             String dbHashedPassword = userInfo.get(0).getPASSWORD();
@@ -46,12 +49,12 @@ public class AccountService {
                 }
                 UserDetails userDetails = new User(username, password,authorities);
                 String token = UserSecurityController.generateToken(userDetails); // 예시: 유저명을 토큰의 서브젝트로 사용
-                return new AuthenticationResult(true, token);
+                return new AuthenticationResult(true, token,userInfo.get(0).getUSER_ID());
             } else {
-                return new AuthenticationResult(false, null);
+                return new AuthenticationResult(false, null,null);
             }
         }catch (Exception e){
-            return new AuthenticationResult(false, null);
+            return new AuthenticationResult(false, null,null);
 
         }
 
@@ -66,6 +69,7 @@ public class AccountService {
         // 비밀번호 해시화
         String hashedPassword = UserSecurityController.hashPassword(user.getPASSWORD());
         user.setPASSWORD(hashedPassword);
+
         userMapper.insert(user);
     }
 

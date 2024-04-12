@@ -17,7 +17,7 @@ public class CalendarController {
     private CalendarService calendarService;
     //일정 조회
     @RequestMapping(value ="scheduleSelect" ,method = RequestMethod.GET)
-    public List<Calendar> getSelectList(List<Calendar> calendar){
+    public List<Calendar> getSelectList(Calendar calendar){
 
         return calendarService.select(calendar);
     }

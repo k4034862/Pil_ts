@@ -13,7 +13,7 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
     //로그인 버튼
-    @RequestMapping(value ="select" ,method = RequestMethod.GET)
+    @RequestMapping(value ="select" ,method = RequestMethod.POST)
     public AuthenticationResult postSelectList( MyUser user){
 
         return accountService.select(user);

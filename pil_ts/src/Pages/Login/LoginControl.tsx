@@ -4,6 +4,7 @@ import SignUpView from "./SignUpView";
 import ForgetIdView from "./ForgetIdView";
 import { useNavigate } from "react-router-dom";
 import { Snackbar } from "../../Component/Snackbar";
+import Commons from "../../Common/Commons";
 import axios from "axios";
 
 function LoginControl() {
@@ -40,29 +41,28 @@ function LoginControl() {
   // 로그인 버튼
   const Login = async () => {
     try {
-      let postData = {
+      let postData = new URLSearchParams({
         USER_ID: inputs.loginId,
         PASSWORD: inputs.loginPw,
-      };
-
-      const response = await axios.get("/select", {
-        headers: {
-          "Content-Type": `application/json`,
-        },
-        params: postData,
       });
 
-      console.log(response);
-      if (response.data === "success") {
-        navigate("/Home");
-      } else {
-        setSnacks({
-          ...snacks,
-          open: true,
-          type: "error",
-          message: "아이디나 비밀번호가 틀렸습니다.",
-        });
-      }
+      Commons.Axios("post", "/select", postData).then((result) => {
+        let data = result?.data;
+        if (data.success == true) {
+          // 토큰 저장
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userId", data.userId);
+          // 아이디 저장
+          navigate("/Home");
+        } else {
+          setSnacks({
+            ...snacks,
+            open: true,
+            type: "error",
+            message: "아이디나 비밀번호가 틀렸습니다.",
+          });
+        }
+      });
     } catch (error) {
       console.error(error);
       // 오류 처리
@@ -71,35 +71,65 @@ function LoginControl() {
 
   //회원가입 버튼
   const SignUp = async () => {
-    await axios
-      .post(
-        "/insert",
-        new URLSearchParams({
-          USER_ID: signInputs.loginId,
-          USER_NM: signInputs.firstId + signInputs.lastId,
-          PASSWORD: signInputs.loginPw,
-          USER_EMAIL: signInputs.email,
-        })
-      )
-      .then((result: any) => {
-        console.log(result);
+    let postData = new URLSearchParams({
+      USER_ID: signInputs.loginId,
+      USER_NM: signInputs.firstId + signInputs.lastId,
+      PASSWORD: signInputs.loginPw,
+      USER_EMAIL: signInputs.email,
+    });
+    try {
+      if (
+        signInputs.loginId == null ||
+        signInputs.loginId == undefined ||
+        signInputs.loginId == ""
+      ) {
         setSnacks({
           ...snacks,
           open: true,
           type: "info",
-          message: "회원가입에 성공하였습니다.",
+          message: "아이디를 입력하세요.",
         });
-        setPageNo(0);
-      })
-      .catch((error) => {
+      } else if (
+        signInputs.loginPw == null ||
+        signInputs.loginPw == undefined ||
+        signInputs.loginPw == ""
+      ) {
         setSnacks({
           ...snacks,
           open: true,
-          type: "error",
-          message: "이미 가입된 회원입니다.",
+          type: "info",
+          message: "비밀번호를 입력하세요.",
         });
-        console.log(error);
+      } else {
+        Commons.Axios("post", "/insert", postData)
+          .then((result) => {
+            let data = result?.data;
+            setSnacks({
+              ...snacks,
+              open: true,
+              type: "info",
+              message: "회원가입에 성공하였습니다.",
+            });
+            setPageNo(0);
+          })
+          .catch((error) => {
+            setSnacks({
+              ...snacks,
+              open: true,
+              type: "error",
+              message: "이미 가입된 회원입니다.",
+            });
+          });
+      }
+    } catch (error) {
+      setSnacks({
+        ...snacks,
+        open: true,
+        type: "error",
+        message: "이미 가입된 회원입니다.",
       });
+      // 오류 처리
+    }
   };
 
   //아이디찾기 버튼

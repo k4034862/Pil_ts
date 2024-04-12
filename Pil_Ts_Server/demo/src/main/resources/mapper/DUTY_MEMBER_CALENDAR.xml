@@ -8,10 +8,7 @@
 <!--    조회 sql-->
     <select id="select" resultType="com.example.demo.Model.Calendar">
         CALL sp_duty_calendar_management_s (
-            #{USER_ID},
-            #{WORKING_DATE},
-            #{WORKING_NAME},
-            #{CREATE_ID},
+            #{USER_ID}
             )
     </select>
     <!--    생성 및 수정 sql-->

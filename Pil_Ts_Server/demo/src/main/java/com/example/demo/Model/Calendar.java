@@ -2,6 +2,7 @@ package com.example.demo.Model;
 
 import lombok.Data;
 
+@Data
 public class Calendar {
 //    사용자아이디
     public String USER_ID;
