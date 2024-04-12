@@ -126,7 +126,6 @@ function SignUpView(props: any) {
                 sx={{ mt: 3, mb: 2, mr: 1 }}
                 onClick={(e) => {
                   props.SignUp();
-                  props.setPageNo(0);
                 }}
               >
                 회원 가입
