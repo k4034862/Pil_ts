@@ -39,29 +39,34 @@ function LoginControl() {
 
   // 로그인 버튼
   const Login = async () => {
-    let getData = {
-      USER_ID: inputs.loginId,
-      PASSWORD: inputs.loginPw,
-    };
+    try {
+      let postData = {
+        USER_ID: inputs.loginId,
+        PASSWORD: inputs.loginPw,
+      };
 
-    await axios
-      .get("/select", {
-        params: getData,
-      })
-      .then((result: any) => {
-        console.log(result);
-        if (result.data === "success") {
-          navigate("/Home");
-        } else {
-          setSnacks({
-            ...snacks,
-            open: true,
-            type: "error", // 로그인 실패 시에는 error로 설정
-            message: "아이디나 비밀번호가 틀렸습니다.",
-          });
-        }
-      })
-      .catch((error) => console.log(error));
+      const response = await axios.get("/select", {
+        headers: {
+          "Content-Type": `application/json`,
+        },
+        params: postData,
+      });
+
+      console.log(response);
+      if (response.data === "success") {
+        navigate("/Home");
+      } else {
+        setSnacks({
+          ...snacks,
+          open: true,
+          type: "error",
+          message: "아이디나 비밀번호가 틀렸습니다.",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      // 오류 처리
+    }
   };
 
   //회원가입 버튼

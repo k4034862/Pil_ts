@@ -1,6 +1,5 @@
 package com.example.demo.service;
 import com.example.demo.Model.Calendar;
-import com.example.demo.Model.User;
 import com.example.demo.mapper.CalendarMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
